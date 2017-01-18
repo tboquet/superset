@@ -1,0 +1,17 @@
+version: '2'
+services:
+  notebook:
+    image: tboquet/fullscrap
+    restart: always
+    volumes:
+      - /home/thomas/projets/ssense:/notebooks
+    external_links:
+      - superset_postgresql_1
+    networks:
+      - default
+      - superset_default
+    ports:
+      - "987:8888"
+networks:
+  superset_default:
+    external: true
