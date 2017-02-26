@@ -14,7 +14,8 @@ RUN apk add --no-cache \
         ldap3==2.1.1 \
         psycopg2==2.6.1 \
         redis==2.10.5 \
-        sqlalchemy-redshift==0.5.0
+        sqlalchemy-redshift==0.5.0 \
+        gunicorn
 
 # Default config
 ENV LANG=C.UTF-8 \
@@ -34,4 +35,5 @@ USER superset
 EXPOSE 8088
 HEALTHCHECK CMD ["curl", "-f", "http://localhost:8088/health"]
 ENTRYPOINT ["superset"]
-CMD ["runserver"]
+# CMD ["runserver"]
+CMD ["gunicorn", "-w", "6", "--timeout", "60", "-b", "0.0.0.0:8088" "--limit-request-line", "0", "--limit-request-field_size", "0", "superset:app"]

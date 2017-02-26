@@ -15,15 +15,24 @@ services:
       MYSQL_PASSWORD: superset
     volumes:
       - mysql:/var/lib/mysql
+  postgresql:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: superset
+      POSTGRES_USER: superset
+    volumes:
+      - /media/thomas/HDData/postgres_superset:/var/lib/postgresql/data
   superset:
     build: .
     image: amancevice/superset
     restart: always
     depends_on:
+      - postgresql
       - mysql
       - redis
     environment:
-      MAPBOX_API_KEY: ${MAPBOX_API_KEY}
+      MAPBOX_API_KEY: pk.eyJ1IjoidGJvcXVldCIsImEiOiJjaXhmMWFjbG4wMGxlMnRzMTZ3N20ydnFlIn0.CijrplNnJ9AXYFqqx8JMtg
     ports:
       - "8088:8088"
     volumes:
